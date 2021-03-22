@@ -11,22 +11,31 @@
     <EditText
         android:visibility="visible"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="65dp"
         android:hint="enter your email"
         android:id="@+id/email"/>
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="65dp"
         android:hint="password"
         android:id="@+id/password"/>
     <Button
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:fadingEdge="horizontal"
+        android:backgroundTint="@color/quantum_yellow300"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="18dp"
+        android:layout_height="70dp"
         android:text="login"
         android:id="@+id/login"/>
     <Button
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:backgroundTint="@color/quantum_yellow300"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="17dp"
+        android:layout_height="70dp"
         android:text="registration(For First Time Users)"
         android:id="@+id/registration"/>
 
