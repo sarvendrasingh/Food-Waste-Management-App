@@ -16,7 +16,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class NGOMapActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class NGOMapActivity extends AppCompatActivity{
     private GoogleMap mMap;
     Location mLastLocation;
     LocationRequest mLocationRequest;
@@ -27,11 +27,6 @@ public class NGOMapActivity extends AppCompatActivity implements OnMapReadyCallb
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_map);
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.mapView2);
-        mapFragment.getMapAsync(this);
-
 
         mLogout = (Button) findViewById(R.id.logout);
         mLogout.setOnClickListener(new View.OnClickListener() {
@@ -46,11 +41,5 @@ public class NGOMapActivity extends AppCompatActivity implements OnMapReadyCallb
         });
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(0, 0))
-                .title("Marker"));
 
-    }
 }
