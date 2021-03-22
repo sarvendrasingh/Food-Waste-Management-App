@@ -1,9 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NGOLogin">
+    tools:context=".NGOLogin"
+    android:background="@drawable/van"
+    android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <EditText
+        android:layout_marginTop="45dp"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:hint="enter your email"
+        android:id="@+id/email"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:hint="password"
+        android:id="@+id/password"/>
+    <Button
+        android:layout_width="match_parent"
+        android:fadingEdge="horizontal"
+        android:textStyle="bold"
+        android:textSize="18dp"
+        android:layout_height="70dp"
+        android:text="login"
+        android:id="@+id/login"/>
+    <Button
+        android:layout_width="match_parent"
+        android:textStyle="bold"
+        android:backgroundTint="@color/quantum_yellow300"
+        android:textColor="@color/black"
+        android:textSize="17dp"
+        android:layout_height="70dp"
+        android:text="registration(For First Time Users)"
+        android:id="@+id/registration"/>
+
+</LinearLayout>

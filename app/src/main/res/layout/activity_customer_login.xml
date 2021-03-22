@@ -9,6 +9,7 @@
     android:orientation="vertical">
 
     <EditText
+        android:layout_marginTop="45dp"
         android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="65dp"
@@ -22,8 +23,6 @@
     <Button
         android:layout_width="match_parent"
         android:fadingEdge="horizontal"
-        android:backgroundTint="@color/quantum_yellow300"
-        android:textColor="@color/black"
         android:textStyle="bold"
         android:textSize="18dp"
         android:layout_height="70dp"
