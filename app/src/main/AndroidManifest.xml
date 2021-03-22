@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FoodWasteManagementApp">
-        <activity android:name=".CustomerLogin"></activity>
+        <activity android:name=".NGOMapActivity"></activity>
+        <activity android:name=".CustomerMapActivity" />
+        <activity android:name=".CustomerLogin" />
         <activity android:name=".NGOLogin" />
         <activity android:name=".MainActivity">
             <intent-filter>
