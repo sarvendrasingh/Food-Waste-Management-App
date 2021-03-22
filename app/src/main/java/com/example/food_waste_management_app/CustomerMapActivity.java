@@ -29,7 +29,7 @@ public class CustomerMapActivity extends AppCompatActivity implements OnMapReady
         setContentView(R.layout.activity_customer_map);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.mapView2);
+                .findFragmentById(R.id.mapView);
         mapFragment.getMapAsync(this);
 
         mLogout = (Button) findViewById(R.id.logout);
