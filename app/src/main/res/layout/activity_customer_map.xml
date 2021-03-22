@@ -32,15 +32,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.gms.maps.MapView
+    <fragment
         android:id="@+id/mapView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="414dp"
+        android:layout_height="627dp"
         android:layout_marginTop="2dp"
         app:layout_constraintBottom_toTopOf="@+id/callNGO"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <Button
         android:id="@+id/callNGO"
