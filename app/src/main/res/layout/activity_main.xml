@@ -37,7 +37,7 @@
         android:layout_marginBottom="50dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:src="@drawable/AdobeStock_264542845"
+        android:src="@drawable/front"
         android:padding="@dimen/cardview_default_radius"
         android:fadingEdge="horizontal"
         android:fadingEdgeLength="5dp"
