@@ -7,6 +7,8 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.GoogleMap;
@@ -21,12 +23,14 @@ public class NGOMapActivity extends AppCompatActivity{
     Location mLastLocation;
     LocationRequest mLocationRequest;
 
+    private Switch mWorkingSwitch;
+
     private Button mLogout, mSettings, mCollect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_customer_map);
+        setContentView(R.layout.activity_ngo_map);
 
         mLogout = (Button) findViewById(R.id.logout);
         mLogout.setOnClickListener(new View.OnClickListener() {
@@ -39,7 +43,31 @@ public class NGOMapActivity extends AppCompatActivity{
                 return;
             }
         });
+        mSettings = (Button) findViewById(R.id.button3);
+        mSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(NGOMapActivity.this, DriverProfile.class);
+                startActivity(intent);
+                finish();
+                return;
+            }
+        });
+
+        mWorkingSwitch = (Switch) findViewById(R.id.workingswitch);
+        mWorkingSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+//                    connectDriver();
+                }else{
+//                    disconnectDriver();
+                }
+            }
+        });
     }
+
+
 
 
 }

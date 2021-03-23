@@ -3,43 +3,39 @@ package com.example.food_waste_management_app;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class CustomerMapActivity extends AppCompatActivity {
-    private GoogleMap mMap;
-    Location mLastLocation;
-    LocationRequest mLocationRequest;
+public class CustomerProfile extends AppCompatActivity {
 
-    private Button mLogout, mSettings, mRequest;
+    private Button mLogout, mBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_customer_map);
+        setContentView(R.layout.activity_customer_profile);
 
         mLogout = (Button) findViewById(R.id.logout);
         mLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(CustomerMapActivity.this, MainActivity.class);
+                Intent intent = new Intent(CustomerProfile.this, MainActivity.class);
                 startActivity(intent);
                 finish();
                 return;
             }
         });
-        mSettings = (Button) findViewById(R.id.profile);
-        mSettings.setOnClickListener(new View.OnClickListener() {
+
+        mBack = (Button) findViewById(R.id.back);
+        mBack.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(CustomerMapActivity.this, CustomerProfile.class);
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(CustomerProfile.this, CustomerMapActivity.class);
                 startActivity(intent);
                 finish();
                 return;
