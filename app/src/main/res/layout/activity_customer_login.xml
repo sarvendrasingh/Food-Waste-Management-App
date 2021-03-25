@@ -13,12 +13,12 @@
         android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="65dp"
-        android:hint="enter your email"
+        android:hint="Enter Email"
         android:id="@+id/email"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="65dp"
-        android:hint="password"
+        android:hint="Password"
         android:id="@+id/password"/>
     <Button
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
         android:textStyle="bold"
         android:textSize="17dp"
         android:layout_height="70dp"
-        android:text="registration(For First Time Users)"
+        android:text="Registration(For First Time User)"
         android:id="@+id/registration"/>
 
 </LinearLayout>
