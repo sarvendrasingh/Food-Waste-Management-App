@@ -181,11 +181,7 @@ public class CustomerProfile extends AppCompatActivity {
 
         int selectId = mRadioGroup.getCheckedRadioButtonId();
 
-        final RadioButton radioButton = (RadioButton) findViewById(selectId);
 
-        if (radioButton.getText() == null){
-            return;
-        }
 
 //            mService = radioButton.getText().toString();
 
