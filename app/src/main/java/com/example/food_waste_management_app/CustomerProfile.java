@@ -104,6 +104,10 @@ public class CustomerProfile extends AppCompatActivity {
                 return;
             }
         });
+
+        mAuth = FirebaseAuth.getInstance();
+        userID = mAuth.getCurrentUser().getUid();
+
         mNameField = (EditText) findViewById(R.id.name);
         mEmailField = (EditText) findViewById(R.id.email);
         mAddressField = (EditText) findViewById(R.id.address);
@@ -183,7 +187,7 @@ public class CustomerProfile extends AppCompatActivity {
 
 
 
-//            mService = radioButton.getText().toString();
+//             mService = radioButton.getText().toString();
 
         Map userInfo = new HashMap();
         userInfo.put("name", mName);
