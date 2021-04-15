@@ -86,28 +86,37 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class CustomerProfile extends AppCompatActivity {
-    // creating variables for
-    // EditText and buttons.
-    private Button mLogout, mBack;
-    private EditText customerNameEdt, customerEmailEdt, customerAddressEdt;
-    private Button confirm;
+    private EditText mNameField, mEmailField, mAddressField;
 
-    // creating a variable for our
-    // Firebase Database.
-    FirebaseDatabase firebaseDatabase;
+    private Button mBack, mConfirm, mLogout;
 
-    // creating a variable for our Database
-    // Reference for Firebase.
-    DatabaseReference databaseReference;
+    private ImageView mProfileImage;
 
-    // creating a variable for
-    // our object class
-    CustomerInfo customerInfo;
+    private FirebaseAuth mAuth;
+    private DatabaseReference mCustomerDatabase;
+
+    private String userID;
+    private String mName;
+    private String mEmail;
+    private String mAddress;
+    private String mProfileImageUrl;
+
+    private Uri resultUri;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_profile);
+
+        mNameField = (EditText) findViewById(R.id.name);
+        mEmailField = (EditText) findViewById(R.id.email);
+        mAddressField = (EditText) findViewById(R.id.address);
+
+        mProfileImage = (ImageView) findViewById(R.id.profileImage);
+
+        mBack = (Button) findViewById(R.id.back);
+        mConfirm = (Button) findViewById(R.id.confirm);
 
         mLogout = (Button) findViewById(R.id.logout);
         mLogout.setOnClickListener(new View.OnClickListener() {
@@ -121,88 +130,148 @@ public class CustomerProfile extends AppCompatActivity {
             }
         });
 
-        mBack = (Button) findViewById(R.id.back);
+        mAuth = FirebaseAuth.getInstance();
+        userID = mAuth.getCurrentUser().getUid();
+        mCustomerDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Customers").child(userID);
+
+        getUserInfo();
+
+        mProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, 1);
+            }
+        });
+
+        mConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveUserInformation();
+            }
+        });
+
         mBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(CustomerProfile.this, NGOMapActivity.class);
+                Intent intent = new Intent(CustomerProfile.this, CustomerMapActivity.class);
                 startActivity(intent);
                 finish();
                 return;
             }
         });
-
-        // initializing our edittext and button
-        customerNameEdt = findViewById(R.id.name);
-        customerEmailEdt = findViewById(R.id.email);
-        customerAddressEdt = findViewById(R.id.address);
-
-        // below line is used to get the
-        // instance of our FIrebase database.
-        firebaseDatabase = FirebaseDatabase.getInstance();
-
-        // below line is used to get reference for our database.
-        databaseReference = firebaseDatabase.getReference("CustomerInfo");
-
-        // initializing our object
-        // class variable.
-        customerInfo = new CustomerInfo();
-
-        confirm = findViewById(R.id.confirm);
-
-        // adding on click listener for our button.
-        confirm.setOnClickListener(new View.OnClickListener() {
+    }
+    private void getUserInfo(){
+        mCustomerDatabase.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-
-                // getting text from our edittext fields.
-                String name = customerNameEdt.getText().toString();
-                String email = customerEmailEdt.getText().toString();
-                String address = customerAddressEdt.getText().toString();
-
-                // below line is for checking weather the
-                // edittext fields are empty or not.
-                if (TextUtils.isEmpty(name) && TextUtils.isEmpty(email) && TextUtils.isEmpty(address)) {
-                    // if the text fields are empty
-                    // then show the below message.
-                    Toast.makeText(CustomerProfile.this, "Please add some data.", Toast.LENGTH_SHORT).show();
-                } else {
-                    // else call the method to add
-                    // data to our database.
-                    addDatatoFirebase(name, email, address);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists() && dataSnapshot.getChildrenCount()>0){
+                    Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                    if(map.get("name")!=null){
+                        mName = map.get("name").toString();
+                        mNameField.setText(mName);
+                    }
+                    if(map.get("email")!=null){
+                        mEmail = map.get("email").toString();
+                        mEmailField.setText(mEmail);
+                    }
+                    if(map.get("address")!=null) {
+                        mAddress = map.get("address").toString();
+                        mAddressField.setText(mAddress);
+                    }
+                    if(map.get("profileImageUrl")!=null){
+                        mProfileImageUrl = map.get("profileImageUrl").toString();
+                        Glide.with(getApplication()).load(mProfileImageUrl).into(mProfileImage);
+                    }
                 }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
             }
         });
     }
 
-    private void addDatatoFirebase(String name, String email, String address) {
-        // below 3 lines of code is used to set
-        // data in our object class.
-        customerInfo.setCustomerName(name);
-        customerInfo.setCustomerEmail(email);
-        customerInfo.setCustomerAddress(address);
 
-        // we are use add value event listener method
-        // which is called with database reference.
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // inside the method of on Data change we are setting
-                // our object class to our database reference.
-                // data base reference will sends data to firebase.
-                databaseReference.setValue(customerInfo);
 
-                // after adding this data we are showing toast message.
-                Toast.makeText(CustomerProfile.this, "data added", Toast.LENGTH_SHORT).show();
+    private void saveUserInformation() {
+        mName = mNameField.getText().toString();
+        mEmail = mEmailField.getText().toString();
+        mAddress = mAddressField.getText().toString();
+
+        Map userInfo = new HashMap();
+        userInfo.put("name", mName);
+        userInfo.put("email", mEmail);
+        userInfo.put("address", mAddress);
+        mCustomerDatabase.updateChildren(userInfo);
+
+        if(resultUri != null) {
+
+            StorageReference filePath = FirebaseStorage.getInstance().getReference().child("profile_images").child(userID);
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getApplication().getContentResolver(), resultUri);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // if the data is not added or it is cancelled then
-                // we are displaying a failure toast message.
-                Toast.makeText(CustomerProfile.this, "Fail to add data " + error, Toast.LENGTH_SHORT).show();
-            }
-        });
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+            byte[] data = baos.toByteArray();
+            UploadTask uploadTask = filePath.putBytes(data);
+
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    finish();
+                    return;
+                }
+            });
+//            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                @Override
+//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                    Task<Uri> downloadUrl = taskSnapshot.getStorage().getDownloadUrl();
+//
+//                    Map newImage = new HashMap();
+//                    newImage.put("profileImageUrl", downloadUrl.toString());
+//                    mCustomerDatabase.updateChildren(newImage);
+//
+//                    finish();
+//                    return;
+//                }
+//            });
+
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            String url = uri.toString();
+                            Map newImage = new HashMap();
+                            newImage.put("profileImageUrl", uri.toString());
+                            mCustomerDatabase.updateChildren(newImage);
+
+                            //Do what you need to do with url
+                        }
+                    });
+                }
+            });
+        }else{
+            finish();
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1 && resultCode == Activity.RESULT_OK){
+            Uri imageUri = data.getData();
+            resultUri = imageUri;
+            mProfileImage.setImageURI(resultUri);
+        }
     }
 }
