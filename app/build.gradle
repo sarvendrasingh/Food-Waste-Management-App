@@ -13,6 +13,7 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true  //cannot fit requested classes in a single dex file
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -52,6 +53,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:19.2.2'
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     implementation 'com.google.firebase:firebase-database:19.7.0'
+    implementation 'androidx.multidex:multidex:2.0.1'   //error solve for single dex file error depedency
     implementation 'com.firebase:geofire-android:3.0.0'
     implementation "androidx.cardview:cardview:1.0.0"
     implementation 'com.github.jd-alexander:library:1.1.0'
