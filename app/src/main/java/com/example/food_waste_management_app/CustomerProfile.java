@@ -88,6 +88,7 @@ import com.google.firebase.database.ValueEventListener;
 public class CustomerProfile extends AppCompatActivity {
     // creating variables for
     // EditText and buttons.
+    private Button mLogout, mBack;
     private EditText customerNameEdt, customerEmailEdt, customerAddressEdt;
     private Button confirm;
 
@@ -107,6 +108,30 @@ public class CustomerProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_profile);
+
+        mLogout = (Button) findViewById(R.id.logout);
+        mLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(CustomerProfile.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+                return;
+            }
+        });
+
+        mBack = (Button) findViewById(R.id.back);
+        mBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(CustomerProfile.this, NGOMapActivity.class);
+                startActivity(intent);
+                finish();
+                return;
+            }
+        });
 
         // initializing our edittext and button
         customerNameEdt = findViewById(R.id.name);
