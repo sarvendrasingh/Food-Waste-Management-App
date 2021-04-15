@@ -76,7 +76,7 @@
         android:ems="10"
         android:hint="Email Of The Founder/CEO"
         android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toTopOf="@+id/about"
+        app:layout_constraintBottom_toTopOf="@+id/address"
         app:layout_constraintEnd_toEndOf="@+id/name"
         app:layout_constraintHorizontal_bias="0.15"
         app:layout_constraintStart_toStartOf="parent"
