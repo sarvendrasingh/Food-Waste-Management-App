@@ -158,8 +158,7 @@ public class CustomerProfile extends AppCompatActivity {
                 FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(CustomerProfile.this, CustomerMapActivity.class);
                 startActivity(intent);
-                finish();
-                return;
+
             }
         });
     }

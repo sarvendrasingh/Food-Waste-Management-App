@@ -1,6 +1,7 @@
 package com.example.food_waste_management_app;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import android.content.Intent;
 import android.location.Location;
@@ -9,11 +10,16 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class CustomerMapActivity extends AppCompatActivity {
-    private GoogleMap mMap;
+public class CustomerMapActivity extends FragmentActivity implements OnMapReadyCallback {
+    GoogleMap map;
     Location mLastLocation;
     LocationRequest mLocationRequest;
 
@@ -23,6 +29,10 @@ public class CustomerMapActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_map);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
 
         mLogout = (Button) findViewById(R.id.logout);
         mLogout.setOnClickListener(new View.OnClickListener() {
@@ -45,5 +55,13 @@ public class CustomerMapActivity extends AppCompatActivity {
                 return;
             }
         });
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+        LatLng Maharashtra = new LatLng(19.169257, 73.341601);
+        map.addMarker(new MarkerOptions().position(Maharashtra).title("Maharashtra"));
+        map.moveCamera(CameraUpdateFactory.newLatLng(Maharashtra));
     }
 }
