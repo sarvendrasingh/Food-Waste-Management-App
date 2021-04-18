@@ -30,8 +30,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class CustomerMapActivity extends FragmentActivity{
     private FusedLocationProviderClient client;
     GoogleMap map;
-    Location mLastLocation;
-    LocationRequest mLocationRequest;
+
     private  SupportMapFragment mapFragment;
     private int REQUEST_CODE = 111;
 

@@ -7,7 +7,7 @@
     tools:context=".CustomerMapActivity">
 
 
-    <com.google.android.gms.maps.MapView
+    <fragment
         android:id="@+id/mapView2"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_marginStart="5dp"

@@ -1,31 +1,43 @@
 package com.example.food_waste_management_app;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class NGOMapActivity extends AppCompatActivity implements OnMapReadyCallback{
-    private GoogleMap mMap;
+import static android.widget.Toast.*;
+
+public class NGOMapActivity extends AppCompatActivity{
+    private FusedLocationProviderClient client;
+    GoogleMap map;
     Location mLastLocation;
     LocationRequest mLocationRequest;
-    private MapView mMapView;
-
-    private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
+    private  SupportMapFragment mapFragment;
+    private int REQUEST_CODE = 111;
 
     private Switch mWorkingSwitch;
 
@@ -35,6 +47,12 @@ public class NGOMapActivity extends AppCompatActivity implements OnMapReadyCallb
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ngo_map);
+
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapView2);
+
+        client = LocationServices.getFusedLocationProviderClient(NGOMapActivity.this);
+
+
 
         mLogout = (Button) findViewById(R.id.logout);
         mLogout.setOnClickListener(new View.OnClickListener() {
@@ -63,8 +81,16 @@ public class NGOMapActivity extends AppCompatActivity implements OnMapReadyCallb
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
+                    makeText(NGOMapActivity.this, "Location is live now", LENGTH_SHORT).show();
+                    if (ActivityCompat.checkSelfPermission(NGOMapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED){
+                        getCurrentLocation();
+                    }
+                    else{
+                        ActivityCompat.requestPermissions(NGOMapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
+                    }
 //                    connectDriver();
                 }else{
+                    makeText(NGOMapActivity.this, "Location is not live now", LENGTH_SHORT).show();
 //                    disconnectDriver();
                 }
             }
@@ -128,10 +154,38 @@ public class NGOMapActivity extends AppCompatActivity implements OnMapReadyCallb
 //        super.onLowMemory();
 //        mMapView.onLowMemory();
 //    }
+private void getCurrentLocation() {
+    Task<Location> task = client.getLastLocation();
+    task.addOnSuccessListener(new OnSuccessListener<Location>() {
+        @Override
+        public void onSuccess(Location location) {
+            if(location!=null){
+                mapFragment.getMapAsync(new OnMapReadyCallback() {
+                    @Override
+                    public void onMapReady(GoogleMap googleMap) {
+                        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("You Are Here");
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
+                        googleMap.addMarker(markerOptions).showInfoWindow();
+                    }
+                });
+            }
+        }
+    });
+
+}
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_CODE){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                getCurrentLocation();
+            }
+        }
+        else{
+            makeText(this, "Permission denied", LENGTH_SHORT).show();
+        }
     }
 }
