@@ -27,9 +27,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
+import static android.widget.Toast.LENGTH_SHORT;
+import static android.widget.Toast.makeText;
+
 public class CustomerMapActivity extends FragmentActivity{
     private FusedLocationProviderClient client;
     GoogleMap map;
+    double cLat, cLon;
 
     private  SupportMapFragment mapFragment;
     private int REQUEST_CODE = 111;
@@ -40,6 +44,7 @@ public class CustomerMapActivity extends FragmentActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_map);
+        LatLng dObject = new NGOMapActivity().dlatLon();
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.maps);
 
@@ -51,7 +56,25 @@ public class CustomerMapActivity extends FragmentActivity{
         else{
             ActivityCompat.requestPermissions(CustomerMapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
         }
-
+        mRequest = (Button) findViewById(R.id.callNGO);
+        mRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(dObject!=null){
+                    mapFragment.getMapAsync(new OnMapReadyCallback() {
+                        @Override
+                        public void onMapReady(GoogleMap googleMap) {
+                            MarkerOptions markerOptions = new MarkerOptions().position(dObject).title("Nearest NGO");
+                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(dObject, 14));
+                            googleMap.addMarker(markerOptions).showInfoWindow();
+                        }
+                    });
+                }
+                else{
+                    makeText(CustomerMapActivity.this, "No nearby NGO found", LENGTH_SHORT).show();
+                }
+            }
+        });
         mLogout = (Button) findViewById(R.id.logout);
         mLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +107,7 @@ public class CustomerMapActivity extends FragmentActivity{
                     mapFragment.getMapAsync(new OnMapReadyCallback() {
                         @Override
                         public void onMapReady(GoogleMap googleMap) {
-                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                            LatLng latLng = new LatLng(cLat=location.getLatitude(), cLon=location.getLongitude());
                             MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("You Are Here");
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
                             googleMap.addMarker(markerOptions).showInfoWindow();
@@ -108,5 +131,10 @@ public class CustomerMapActivity extends FragmentActivity{
         else{
             Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public LatLng clatLon() {
+        LatLng rlatLng = new LatLng(cLat, cLon);
+        return rlatLng;
     }
 }

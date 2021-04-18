@@ -39,19 +39,41 @@ public class NGOMapActivity extends AppCompatActivity{
     private  SupportMapFragment mapFragment;
     private int REQUEST_CODE = 111;
 
+    double dLat, dLon;
+
     private Switch mWorkingSwitch;
 
     private Button mLogout, mSettings, mCollect;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ngo_map);
+        LatLng cObject = new CustomerMapActivity().clatLon();
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapView2);
 
         client = LocationServices.getFusedLocationProviderClient(NGOMapActivity.this);
-
+        mCollect = (Button) findViewById(R.id.collect);
+        mCollect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(cObject!=null){
+                    mapFragment.getMapAsync(new OnMapReadyCallback() {
+                        @Override
+                        public void onMapReady(GoogleMap googleMap) {
+                            MarkerOptions markerOptions = new MarkerOptions().position(cObject).title("Food is available");
+                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(cObject, 14));
+                            googleMap.addMarker(markerOptions).showInfoWindow();
+                        }
+                    });
+                }
+                else{
+                    makeText(NGOMapActivity.this, "No nearby Donor found", LENGTH_SHORT).show();
+                }
+            }
+        });
 
 
         mLogout = (Button) findViewById(R.id.logout);
@@ -163,7 +185,7 @@ private void getCurrentLocation() {
                 mapFragment.getMapAsync(new OnMapReadyCallback() {
                     @Override
                     public void onMapReady(GoogleMap googleMap) {
-                        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                        LatLng latLng = new LatLng(dLat=location.getLatitude(), dLon=location.getLongitude());
                         MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("You Are Here");
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
                         googleMap.addMarker(markerOptions).showInfoWindow();
@@ -187,5 +209,10 @@ private void getCurrentLocation() {
         else{
             makeText(this, "Permission denied", LENGTH_SHORT).show();
         }
+    }
+
+    public LatLng dlatLon() {
+        LatLng nlatLng = new LatLng(dLat, dLon);
+        return nlatLng;
     }
 }
