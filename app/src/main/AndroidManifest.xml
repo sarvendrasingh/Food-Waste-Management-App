@@ -24,9 +24,9 @@
         android:theme="@style/Theme.FoodWasteManagementApp">
 
         <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="@string/map_api"/>
-        <activity android:name=".DriverProfile"></activity>
+            android:value="@string/map_key"/>
 
+        <activity android:name=".DriverProfile"></activity>
         <activity android:name=".CustomerProfile" />
         <activity android:name=".NGOMapActivity" />
         <activity android:name=".CustomerMapActivity" />

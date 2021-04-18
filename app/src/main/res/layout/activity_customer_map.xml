@@ -9,7 +9,7 @@
 
 
     <fragment
-        android:id="@+id/map"
+        android:id="@+id/maps"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -22,7 +22,8 @@
 
     <Button
         android:id="@+id/callNGO"
-        android:translationZ="90dp"
+        android:translationZ="2dp"
+        android:elevation="5dp"
         android:layout_width="0dp"
         android:layout_height="99dp"
         android:layout_marginStart="7dp"
@@ -36,26 +37,29 @@
 
     <Button
         android:id="@+id/logout"
-        android:layout_width="wrap_content"
-        android:translationZ="90dp"
+        android:translationZ="2dp"
+        android:elevation="5dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="27dp"
         android:layout_marginEnd="16dp"
         android:text="LOGOUT"
-        app:backgroundTint="#E30B0B"
+        android:background="@color/quantum_googred400"
+        app:backgroundTint="@color/quantum_googred"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/profile"
+        android:translationZ="2dp"
+        android:elevation="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="27dp"
-        android:background="#FFFFFF"
+        android:background="@color/quantum_vanillablueA200"
         android:text="PROFILE"
-        android:translationZ="90dp"
-        app:backgroundTint="#242A9F"
+        app:backgroundTint="@color/quantum_vanillablueA700"
         app:iconPadding="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
