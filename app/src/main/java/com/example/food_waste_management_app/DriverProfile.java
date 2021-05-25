@@ -103,7 +103,6 @@ public class DriverProfile extends AppCompatActivity {
         mBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(DriverProfile.this, NGOMapActivity.class);
                 startActivity(intent);
                 finish();
